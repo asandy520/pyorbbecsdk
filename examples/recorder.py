@@ -13,10 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 # ******************************************************************************
+from pyorbbecsdk import *
 import cv2
 import numpy as np
-
-from pyorbbecsdk import *
 
 ESC_KEY = 27
 
