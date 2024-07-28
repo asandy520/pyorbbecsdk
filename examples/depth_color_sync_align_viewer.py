@@ -13,14 +13,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 # ******************************************************************************
-import argparse
-import sys
-
+from pyorbbecsdk import *
 import cv2
 import numpy as np
-
-from pyorbbecsdk import *
 from utils import frame_to_bgr_image
+import sys
+import argparse
 
 ESC_KEY = 27
 
@@ -60,11 +58,11 @@ def main(argv):
         print(e)
         return
     if align_mode == 'HW':
-        if device_pid == 0x066B:
-            # Femto Mega does not support hardware D2C, and it is changed to software D2C
-            config.set_align_mode(OBAlignMode.SW_MODE)
-        else:
-            config.set_align_mode(OBAlignMode.HW_MODE)
+          if device_pid == 0x066B:
+            #Femto Mega does not support hardware D2C, and it is changed to software D2C
+             config.set_align_mode(OBAlignMode.SW_MODE)
+          else:
+             config.set_align_mode(OBAlignMode.HW_MODE)
     elif align_mode == 'SW':
         config.set_align_mode(OBAlignMode.SW_MODE)
     else:
@@ -99,7 +97,7 @@ def main(argv):
             width = depth_frame.get_width()
             height = depth_frame.get_height()
             scale = depth_frame.get_depth_scale()
-
+            print(width, height, scale)
             depth_data = np.frombuffer(depth_frame.get_data(), dtype=np.uint16)
             depth_data = depth_data.reshape((height, width))
             depth_data = depth_data.astype(np.float32) * scale
