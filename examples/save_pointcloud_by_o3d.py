@@ -1,3 +1,4 @@
+
 # ******************************************************************************
 #  Copyright (c) 2023 Orbbec 3D Technology, Inc
 #  
@@ -14,16 +15,13 @@
 #  limitations under the License.
 # ******************************************************************************
 
-import os
-
-import numpy as np
-import open3d as o3d
-
 from pyorbbecsdk import *
+import open3d as o3d
+import numpy as np
+import os
 
 save_points_dir = os.path.join(os.getcwd(), "point_clouds")
 os.makedirs(save_points_dir, exist_ok=True)
-
 
 def convert_to_o3d_point_cloud(points, colors=None):
     """
@@ -34,7 +32,6 @@ def convert_to_o3d_point_cloud(points, colors=None):
     if colors is not None:
         pcd.colors = o3d.utility.Vector3dVector(colors / 255.0)  # Assuming colors are in [0, 255]
     return pcd
-
 
 def save_points_to_ply(frames: FrameSet, camera_param: OBCameraParam):
     """
@@ -55,7 +52,6 @@ def save_points_to_ply(frames: FrameSet, camera_param: OBCameraParam):
     # Save to PLY file
     o3d.io.write_point_cloud(points_filename, pcd)
     return 1
-
 
 def save_color_points_to_ply(frames: FrameSet, camera_param: OBCameraParam):
     """
@@ -80,7 +76,6 @@ def save_color_points_to_ply(frames: FrameSet, camera_param: OBCameraParam):
     o3d.io.write_point_cloud(points_filename, pcd)
     return 1
 
-
 def main():
     pipeline = Pipeline()
     device = pipeline.get_device()
@@ -100,17 +95,16 @@ def main():
             color_profile: VideoStreamProfile = profile_list.get_default_video_stream_profile()
             config.enable_stream(color_profile)
             if device_pid == 0x066B:
-                # Femto Mega does not support hardware D2C, and it is changed to software D2C
-                config.set_align_mode(OBAlignMode.SW_MODE)
+                #Femto Mega does not support hardware D2C, and it is changed to software D2C
+               config.set_align_mode(OBAlignMode.SW_MODE)
             else:
-                config.set_align_mode(OBAlignMode.HW_MODE)
+               config.set_align_mode(OBAlignMode.HW_MODE)
             has_color_sensor = True
     except OBError as e:
         config.set_align_mode(OBAlignMode.DISABLE)
         print(e)
 
     pipeline.start(config)
-    pipeline.enable_frame_sync()
     saved_color_cnt: int = 0
     saved_depth_cnt: int = 0
     while True:
